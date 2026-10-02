@@ -1,0 +1,107 @@
+{
+    "name": "marcinwolnyeu/slopshape-php",
+    "description": "Explainable AI text detector for PHP: scores how likely an English text is AI/LLM-generated from discourse structure, with per-feature evidence. No dependencies; offline (reduced accuracy) or with any LLM. Based on SlopShape (arXiv:2609.15369).",
+    "type": "library",
+    "homepage": "https://github.com/MarcinWolnyEU/SlopShape-PHP",
+    "license": "PolyForm-Noncommercial-1.0.0",
+    "keywords": [
+        "ai detection",
+        "ai text detection",
+        "ai content detection",
+        "ai detector",
+        "ai-generated text",
+        "llm",
+        "explainable ai",
+        "text analysis",
+        "nlp",
+        "discourse analysis",
+        "slop",
+        "slopshape"
+    ],
+    "authors": [
+        {
+            "name": "Marcin Wolny",
+            "email": "marcin@marcinwolny.net"
+        }
+    ],
+    "require": {
+        "php": "^8.3",
+        "ext-mbstring": "*"
+    },
+    "autoload": {
+        "psr-4": {
+            "SlopShape\\": "src/"
+        },
+        "files": [
+            "src/functions.php"
+        ]
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "SlopShape\\Tests\\": "tests/"
+        }
+    },
+    "require-dev": {
+        "friendsofphp/php-cs-fixer": "^3.95.27",
+        "infection/infection": "^0.35.6",
+        "maglnet/composer-require-checker": "^4.20",
+        "pestphp/pest": "^4.7.8",
+        "phpstan/phpstan": "^2.2.16",
+        "phpstan/phpstan-strict-rules": "^2.0.12",
+        "rector/rector": "^2.6.7"
+    },
+    "config": {
+        "allow-plugins": {
+            "infection/extension-installer": true,
+            "pestphp/pest-plugin": true,
+            "php-http/discovery": false
+        },
+        "preferred-install": "dist",
+        "process-timeout": 1800,
+        "sort-packages": true
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-main": "1.0.x-dev"
+        }
+    },
+    "scripts": {
+        "check": [
+            "@composer validate --strict",
+            "@cs",
+            "@stan",
+            "@rector",
+            "@deps",
+            "@test"
+        ],
+        "cs": "php-cs-fixer check --diff --show-progress=none",
+        "cs:fix": "php-cs-fixer fix --show-progress=none",
+        "deps": "composer-require-checker check --config-file=composer-require-checker.json composer.json",
+        "lint": "@php -l src/functions.php",
+        "rector": "rector process --dry-run --no-progress-bar",
+        "rector:fix": "rector process --no-progress-bar",
+        "stan": "phpstan analyse --no-progress --memory-limit=1G",
+        "test": "pest",
+        "test:ci": "pest --parallel --coverage",
+        "test:coverage": "pest --coverage-html=build/coverage --coverage-text",
+        "test:infection": "infection --threads=4 --min-msi=100 --min-covered-msi=100 --logger-github"
+    },
+    "scripts-descriptions": {
+        "check": "Run the full quality gate: validate, cs, phpstan, rector, deps, tests.",
+        "cs": "Check coding style with PHP-CS-Fixer (read-only).",
+        "cs:fix": "Fix coding style with PHP-CS-Fixer.",
+        "deps": "Verify that every used symbol is provided by a declared dependency.",
+        "lint": "Byte-compile the namespaced function file.",
+        "rector": "Preview automated refactorings without applying them.",
+        "rector:fix": "Apply Rector's automated refactorings.",
+        "stan": "Run PHPStan at level max with strict rules.",
+        "test": "Run the test suite.",
+        "test:ci": "Run the test suite in parallel with coverage.",
+        "test:coverage": "Run the test suite and write an HTML coverage report.",
+        "test:infection": "Run mutation testing (Infection) over src, on 4 threads (Infection runs \"max\" as 1 thread on Windows)."
+    },
+    "support": {
+        "issues": "https://github.com/MarcinWolnyEU/SlopShape-PHP/issues",
+        "source": "https://github.com/MarcinWolnyEU/SlopShape-PHP"
+    }
+}

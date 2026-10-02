@@ -1,0 +1,28 @@
+name: Other
+description: Feature ideas, documentation problems, or anything else.
+title: "[Other]: "
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Some requests can't be accepted, whoever asks: changes to what the score means, hand edits to `resources/instrument.json`, and new runtime dependencies. `CONTRIBUTING.md` explains why.
+  - type: dropdown
+    id: kind
+    attributes:
+      label: Kind
+      options:
+        - Feature idea
+        - Request for example
+        - Request for documentation
+        - Request for port to another language
+        - Request for comment
+        - Something else
+    validations:
+      required: true
+  - type: textarea
+    id: details
+    attributes:
+      label: Details
+      description: For a feature idea, describe what you're trying to do, not only the change you have in mind.
+    validations:
+      required: true

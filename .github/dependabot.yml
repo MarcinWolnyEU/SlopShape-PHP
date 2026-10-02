@@ -1,0 +1,28 @@
+version: 2
+
+updates:
+  # The supported PHP range is part of this package's public promise, so a
+  # runtime bump is a decision to review, not one to auto-merge.
+  - package-ecosystem: composer
+    directory: /
+    # Dependabot has no every-two-weeks interval, so this is a cron schedule:
+    # the 1st and 15th of each month, at 06:00 UTC.
+    schedule:
+      interval: cron
+      cronjob: '0 6 1,15 * *'
+    open-pull-requests-limit: 5
+    labels: [dependencies, php]
+    groups:
+      dev-dependencies:
+        applies-to: version-updates
+        dependency-type: development
+        patterns: ['*']
+
+  - package-ecosystem: github-actions
+    directory: /
+    # Same schedule as composer above.
+    schedule:
+      interval: cron
+      cronjob: '0 6 1,15 * *'
+    open-pull-requests-limit: 5
+    labels: [dependencies, ci]

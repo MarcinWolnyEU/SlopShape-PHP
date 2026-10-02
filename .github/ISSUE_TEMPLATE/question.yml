@@ -1,0 +1,20 @@
+name: Question
+description: How to use the package, what a number means, or whether it suits your case.
+title: "[Question]: "
+labels: ["question"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        First check the README and other files in the repository, as well as https://arxiv.org/abs/2609.15369. Chat with an LLM while giving it a cloned copy of the repository. Still can't find the answers? Feel free to ask here.
+  - type: textarea
+    id: question
+    attributes:
+      label: Your question
+    validations:
+      required: true
+  - type: textarea
+    id: context
+    attributes:
+      label: Context
+      description: What you're trying to do, and what you've tried. Include code or a `Score` output if it helps.

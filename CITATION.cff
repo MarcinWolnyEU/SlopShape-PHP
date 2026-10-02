@@ -1,0 +1,43 @@
+cff-version: 1.2.0
+
+# This package is a port. If you use it, cite the study, not this package —
+# the evidence belongs to the paper, and the implementation is a reading of it.
+message: >-
+  If you use SlopShape-PHP, cite the SlopShape paper. This package is a PHP
+  implementation of the study's released instrument and value-level
+  calibration; it is not the study's classifier and it makes no new empirical
+  claim.
+title: "SlopShape-PHP — structural AI-text detection, ported from SlopShape"
+abstract: >-
+  Scores one text against the ten core values of the SlopShape instrument
+  (arXiv:2609.15369) and returns a probability of AI authorship, a
+  confidence, and the evidence behind both. A log-odds sum over released
+  calibration, not a learned model.
+type: software
+repository-code: "https://github.com/MarcinWolnyEU/SlopShape-PHP"
+license: PolyForm-Noncommercial-1.0.0
+version: 1.0.0
+date-released: "2026-10-02"
+keywords:
+  - ai-detection
+  - ai-detector
+  - bot-detection
+  - content-safety
+  - text-analysis
+  - computational-linguistics
+  - slop
+
+references:
+  - type: article
+    title: "SlopShape: Identifying AI-Generated Commercial Web Content"
+    authors:
+      - family-names: Madler
+        given-names: Jochen
+        affiliation: Sitefire
+        orcid: "https://orcid.org/0000-0003-0359-1689"
+    year: 2026
+    journal: "arXiv preprint"
+    identifiers:
+      - type: other
+        value: "arXiv:2609.15369"
+    url: "https://arxiv.org/abs/2609.15369"

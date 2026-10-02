@@ -1,0 +1,123 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+# A stale green build is worse than a red one: it is a green one.
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  tests:
+    name: Tests (PHP ${{ matrix.php }}, ${{ matrix.dependencies }})
+    runs-on: ubuntu-latest
+
+    strategy:
+      fail-fast: false
+      matrix:
+        php: ['8.3', '8.4', '8.5']
+        dependencies: [highest]
+        include:
+          - php: '8.3'
+            dependencies: lowest
+
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php }}
+          extensions: json, mbstring
+          coverage: none
+          tools: composer:v2
+
+      - name: Validate composer.json
+        run: composer validate --strict
+
+      - name: Install dependencies
+        uses: ramsey/composer-install@v4
+        with:
+          dependency-versions: ${{ matrix.dependencies }}
+
+      - name: Verify no undeclared dependencies
+        run: vendor/bin/composer-require-checker check --config-file=composer-require-checker.json composer.json
+
+      - name: Run tests
+        run: vendor/bin/pest --parallel
+
+  static-analysis:
+    name: Static analysis
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.4'
+          coverage: none
+          tools: composer:v2
+
+      - name: Install dependencies
+        uses: ramsey/composer-install@v4
+
+      - name: PHPStan (level max, strict rules)
+        run: vendor/bin/phpstan analyse --no-progress --memory-limit=1G
+
+      - name: Coding style
+        run: vendor/bin/php-cs-fixer check --diff --show-progress=none
+
+      - name: Rector
+        run: vendor/bin/rector process --dry-run --no-progress-bar
+
+  coverage:
+    name: Coverage
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.4'
+          coverage: xdebug
+          tools: composer:v2
+
+      - name: Install dependencies
+        uses: ramsey/composer-install@v4
+
+      # Pest enforces the threshold itself: the job fails below 100% line
+      # coverage, and the log lists the uncovered lines. No external service.
+      - name: Tests with coverage (100% required)
+        run: vendor/bin/pest --parallel --coverage --min=100
+
+  mutation:
+    name: Mutation testing
+    runs-on: ubuntu-latest
+    # Mutation testing is slow and the suite is not the bottleneck for a pull
+    # request, so it runs on the default branch rather than on every change.
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    # Matches composer's process-timeout, so a hung run fails the same way here
+    # and locally.
+    timeout-minutes: 30
+
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.4'
+          coverage: pcov
+          tools: composer:v2
+
+      - name: Install dependencies
+        uses: ramsey/composer-install@v4
+
+      # The composer script holds the thread count and thresholds, so CI and a
+      # local run are the same command. Four threads fit a standard runner.
+      - name: Infection
+        run: composer test:infection

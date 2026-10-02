@@ -1,0 +1,301 @@
+{
+  "schema_version": 1,
+  "provenance": {
+    "study": "SlopShape: Identifying AI-Generated Commercial Web Content",
+    "study_author": "Jochen Madler (Sitefire)",
+    "study_year": 2026,
+    "study_identifier": "arXiv:2609.15369",
+    "study_url": "https://arxiv.org/abs/2609.15369",
+    "instrument_version": "condensed taxonomy 0.85, minus the 52 outcome-blind floor exclusions and the 11 format-sensitivity exclusions",
+    "derived_from": {
+      "features_and_menus": "instrument/condensed_taxonomy_0.85.json",
+      "value_calibration": "artifacts/r6/core_values_selection.json",
+      "floor_exclusions_applied": "instrument/feature_exclusions.json",
+      "format_exclusions_applied": "instrument/format_exclusions.json",
+      "length_statistics": "fetch/corpus_manifest.csv"
+    },
+    "sha256": {
+      "instrument/condensed_taxonomy_0.85.json": "e405ac4ae3831bb8e7b28b5096aa5dbb53ccc1c17bd134238beb19d792035e68",
+      "artifacts/r6/core_values_selection.json": "55e117d7652cd4469e9926240845d17829f0e09b385d2a6ea742b85eee8afecc",
+      "instrument/feature_exclusions.json": "6330696601c5691cb480673499cb7fdebd841d35221e32d2a547682b7af1d91a",
+      "instrument/format_exclusions.json": "ca066cb1b4ee0857ceb1c343ec75a65f3b29f4956299fe511ee1a00e4c6a3dea",
+      "fetch/corpus_manifest.csv": "cabcf21235ef849454b5e2ab038dc8e8c4dc84fc74fb0c92d831ec9c512689d8"
+    },
+    "licence": "The instrument, calibration and statistics in this file are derived from the SlopShape release package, which is (c) the authors, all rights reserved, and published for verification and audit.",
+    "core_only_metrics": {
+      "macro_f1": 0.901,
+      "auprc": 0.9967,
+      "accuracy": 0.9477
+    }
+  },
+  "calibration": {
+    "default": 0.6,
+    "ai_verdict_at": 0.8,
+    "human_verdict_at": 0.2,
+    "min_core_values": 4,
+    "min_latin_ratio": 0.8,
+    "read_floor_words": 250,
+    "judgement_floor_words": 572,
+    "corpus_length": {
+      "n": 2250,
+      "min": 572,
+      "p10": 683,
+      "median": 1068,
+      "p90": 1889,
+      "max": 2814,
+      "share_under_800": 0.234
+    },
+    "note": "weight(gap) = calibration * ln((1 + gap) / (1 - gap)); the default 0.6 is a local choice anchored to the study's mean per-core-feature |SHAP| (7.6446 / 9 = 0.85 log-odds), not a number from the paper."
+  },
+  "features": [
+    {
+      "id": "PAG_FUR_011",
+      "name": "Article Length Class",
+      "question": "What approximate word-count class best describes the article body?",
+      "type": "categorical",
+      "values": [
+        "short_under_800_words",
+        "medium_800_to_1499_words",
+        "long_1500_to_2999_words",
+        "very_long_3000_or_more_words"
+      ],
+      "detection_method": "Estimate or count body words, excluding navigation, footer, and boilerplate.",
+      "dimension": "page_format_navigation",
+      "dimension_label": "Page format",
+      "aspect": "links_furniture_conversion",
+      "measured_by_tool": true
+    },
+    {
+      "id": "STR_FLW_005",
+      "name": "Legacy-versus-Modern Contrast",
+      "question": "Does the article organize persuasion around replacing a legacy, reactive, rigid, or fragmented model with a modern, proactive, or integrated model?",
+      "type": "binary",
+      "values": [
+        "yes",
+        "no"
+      ],
+      "detection_method": "Look for a sustained old-model versus new-model contrast across the heading sequence or major sections.",
+      "dimension": "structure_and_flow",
+      "dimension_label": "Structure",
+      "aspect": "overall_flow",
+      "measured_by_tool": false
+    },
+    {
+      "id": "STR_FLW_006",
+      "name": "Thesis Before First Unit",
+      "question": "Does the opening state a clear governing claim or recommendation before the article begins its main repeated units?",
+      "type": "binary",
+      "values": [
+        "yes",
+        "no"
+      ],
+      "detection_method": "Check whether the preferred conclusion or central claim appears before the first main section, tip, case, or step.",
+      "dimension": "structure_and_flow",
+      "dimension_label": "Structure",
+      "aspect": "overall_flow",
+      "measured_by_tool": false
+    },
+    {
+      "id": "STR_STG_001",
+      "name": "Functional Stage Inventory",
+      "question": "Which major functional stages are present in the article?",
+      "type": "multi_select",
+      "values": [
+        "context",
+        "problem_diagnosis",
+        "definition_or_orientation",
+        "mechanism_explanation",
+        "evidence_or_case",
+        "comparison_or_alternatives",
+        "recommendation_or_method",
+        "exception_or_qualification",
+        "implementation_or_workflow",
+        "summary_or_synthesis",
+        "commercial_cta"
+      ],
+      "detection_method": "Mark every stage that receives a distinct passage, section, or sustained rhetorical function.",
+      "dimension": "structure_and_flow",
+      "dimension_label": "Structure",
+      "aspect": "stage_inventory",
+      "measured_by_tool": false
+    },
+    {
+      "id": "STR_STG_008",
+      "name": "Conclusion Behavior",
+      "question": "How does the article primarily end?",
+      "type": "categorical",
+      "values": [
+        "summary_of_main_points",
+        "restated_thesis_or_reframe",
+        "final_action_plan",
+        "product_or_contact_cta",
+        "related_content_or_resource_route",
+        "new_substantive_point",
+        "abrupt_end_without_conclusion"
+      ],
+      "detection_method": "Classify the final substantive section or final two paragraphs by dominant function.",
+      "dimension": "structure_and_flow",
+      "dimension_label": "Structure",
+      "aspect": "functional_stages",
+      "measured_by_tool": false
+    },
+    {
+      "id": "TIM_CUE_003",
+      "name": "Temporal Reference Types",
+      "question": "Which types of temporal references occur in the post?",
+      "type": "multi_select",
+      "values": [
+        "relative_present_language",
+        "historical_date_or_period",
+        "future_date_or_period",
+        "season_or_holiday",
+        "quarter_or_fiscal_cycle",
+        "policy_effective_date",
+        "operational_cadence",
+        "product_or_contract_lifecycle"
+      ],
+      "detection_method": "Select every reference type visibly present. Relative-present language includes terms such as now, today, currently, recently, and these days.",
+      "dimension": "timeliness",
+      "dimension_label": "Timeliness",
+      "aspect": "dates_deadlines_and_cadence",
+      "measured_by_tool": false
+    },
+    {
+      "id": "TIM_CUE_011",
+      "name": "Freshness Signaling",
+      "question": "How does the post signal novelty, recency, updating, or current relevance?",
+      "type": "multi_select",
+      "values": [
+        "none",
+        "new_or_latest_subject_claim",
+        "updated_or_current_article_claim",
+        "modern_or_next_generation_framing",
+        "recent_market_or_policy_reference",
+        "current_product_or_feature_reference",
+        "future_ready_or_future_proof_claim"
+      ],
+      "detection_method": "Mark explicit language that presents the subject, the article, or the recommendation as new, current, modern, updated, or future-ready.",
+      "dimension": "timeliness",
+      "dimension_label": "Timeliness",
+      "aspect": "dates_deadlines_cues",
+      "measured_by_tool": false
+    },
+    {
+      "id": "VOC_CRD_001",
+      "name": "Dominant Credibility Basis",
+      "question": "What is the article's primary method for establishing credibility?",
+      "type": "categorical",
+      "values": [
+        "confident_institutional_explanation",
+        "named_role_or_professional_expertise",
+        "firsthand_lived_or_operational_experience",
+        "external_research_or_data",
+        "regulatory_or_standards_authority",
+        "customer_or_peer_social_proof",
+        "technical_demonstration_or_code"
+      ],
+      "detection_method": "Determine which credibility device is most central to why the reader should trust the article's recommendations.",
+      "dimension": "voices_and_sources",
+      "dimension_label": "Voices",
+      "aspect": "credibility_grounding",
+      "measured_by_tool": false
+    },
+    {
+      "id": "VOC_PRT_005",
+      "name": "External Participation Pathway",
+      "question": "Does the article route readers beyond the article through a participation or resource mechanism?",
+      "type": "binary",
+      "values": [
+        "absent",
+        "present"
+      ],
+      "detection_method": "Check for links or explicit routes to demos, documentation, tools, videos, case studies, webinars, newsletters, communities, support resources, or purchase pages.",
+      "dimension": "voices_and_sources",
+      "dimension_label": "Voices",
+      "aspect": "participation_and_next_steps",
+      "measured_by_tool": false
+    }
+  ],
+  "core_values": [
+    {
+      "column": "STR_STG_008__restated_thesis_or_reframe",
+      "feature_id": "STR_STG_008",
+      "value": "restated_thesis_or_reframe",
+      "leans": "ai",
+      "gap": 0.65,
+      "ordinal": false
+    },
+    {
+      "column": "STR_STG_001__summary_or_synthesis",
+      "feature_id": "STR_STG_001",
+      "value": "summary_or_synthesis",
+      "leans": "ai",
+      "gap": 0.609,
+      "ordinal": false
+    },
+    {
+      "column": "VOC_PRT_005__absent",
+      "feature_id": "VOC_PRT_005",
+      "value": "absent",
+      "leans": "ai",
+      "gap": 0.592,
+      "ordinal": false
+    },
+    {
+      "column": "STR_FLW_005__no",
+      "feature_id": "STR_FLW_005",
+      "value": "no",
+      "leans": "human",
+      "gap": 0.497,
+      "ordinal": false
+    },
+    {
+      "column": "STR_FLW_006__no",
+      "feature_id": "STR_FLW_006",
+      "value": "no",
+      "leans": "human",
+      "gap": 0.419,
+      "ordinal": false
+    },
+    {
+      "column": "TIM_CUE_011__modern_or_next_generation_framing",
+      "feature_id": "TIM_CUE_011",
+      "value": "modern_or_next_generation_framing",
+      "leans": "ai",
+      "gap": 0.36,
+      "ordinal": false
+    },
+    {
+      "column": "VOC_CRD_001__confident_institutional_explanation",
+      "feature_id": "VOC_CRD_001",
+      "value": "confident_institutional_explanation",
+      "leans": "ai",
+      "gap": 0.347,
+      "ordinal": false
+    },
+    {
+      "column": "STR_STG_001__mechanism_explanation",
+      "feature_id": "STR_STG_001",
+      "value": "mechanism_explanation",
+      "leans": "ai",
+      "gap": 0.285,
+      "ordinal": false
+    },
+    {
+      "column": "TIM_CUE_003__historical_date_or_period",
+      "feature_id": "TIM_CUE_003",
+      "value": "historical_date_or_period",
+      "leans": "human",
+      "gap": 0.283,
+      "ordinal": false
+    },
+    {
+      "column": "PAG_FUR_011__short_under_800_words",
+      "feature_id": "PAG_FUR_011",
+      "value": "short_under_800_words",
+      "leans": "human",
+      "gap": 0.274,
+      "ordinal": false
+    }
+  ]
+}

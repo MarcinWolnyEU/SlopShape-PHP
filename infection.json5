@@ -1,0 +1,23 @@
+{
+    "$schema": "vendor/infection/infection/resources/schema.json",
+    "source": {
+        "directories": ["src"]
+    },
+    "tmpDir": "build/infection",
+    "logs": {
+        "text": "build/infection/infection.log",
+        "summary": "build/infection/summary.log",
+        "github": true
+    },
+    "mutators": {
+        "@default": true
+    },
+    "minMsi": 100,
+    "minCoveredMsi": 100,
+    // Pest tests cannot run under vendor/bin/phpunit; see tools/infection-junit.php.
+    "phpUnit": {
+        "customPath": "vendor/bin/pest"
+    },
+    "initialTestsPhpOptions": "-d auto_prepend_file=tools/infection-junit.php",
+    "threads": "max"
+}

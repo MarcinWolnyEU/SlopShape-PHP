@@ -1,0 +1,14 @@
+{
+    "php-core-extensions": [
+        "core",
+        "json",
+        "pcre",
+        "random",
+        "spl",
+        "standard"
+    ],
+    "scan-files": [
+        "src"
+    ],
+    "symbol-whitelist": []
+}

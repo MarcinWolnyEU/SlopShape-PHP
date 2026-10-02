@@ -1,0 +1,40 @@
+includes:
+    - vendor/phpstan/phpstan-strict-rules/rules.neon
+
+parameters:
+    level: max
+    paths:
+        - src
+        - tests
+    excludePaths:
+        analyseAndScan:
+            # Pest's arch DSL is a fluent, dynamically-dispatched API; there is
+            # nothing for a static analyser to read from it.
+            - tests/Arch
+    tmpDir: build/phpstan
+    treatPhpDocTypesAsCertain: false
+    # An evidence tool that silently widens a float to an int is worse than one
+    # that refuses to run, so nothing is assumed to be in range.
+    reportUnmatchedIgnoredErrors: true
+
+    ignoreErrors:
+        # Tests deliberately build input the library is meant to reject, and
+        # reach into it from the outside to do it. Both are the assertion.
+        -
+            identifier: argument.type
+            path: tests/*Test.php
+        -
+            identifier: property.nonObject
+            path: tests/*Test.php
+        -
+            identifier: return.type
+            path: tests/Pest.php
+        -
+            identifier: return.type
+            path: tests/Unit/GoldenTest.php
+        -
+            identifier: argument.type
+            path: tests/Unit/GoldenTest.php
+        -
+            identifier: binaryOp.invalid
+            path: tests/Unit/ValueObjectsTest.php

@@ -1,0 +1,56 @@
+name: Bug report
+description: The package crashed, returned a wrong score, or behaved differently from the README.
+title: "[Bug]: "
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Pull requests are not accepted, so an issue is the way to get a bug fixed.
+        A wrong-looking score is not always a bug. If `$score->refusal()` explains the result, the detector is refusing on purpose. Ask a question instead if the reason isn't clear.
+        Security problems go to [a private advisory](https://github.com/MarcinWolnyEU/SlopShape-PHP/security/advisories/new), not here.
+  - type: input
+    id: version
+    attributes:
+      label: Package version
+      description: Output of `composer show marcinwolnyeu/slopshape-php | grep versions`
+      placeholder: "* 1.0.0"
+    validations:
+      required: true
+  - type: input
+    id: php
+    attributes:
+      label: PHP version
+      description: Output of `php -v`, first line
+      placeholder: PHP 8.3.13 (cli)
+    validations:
+      required: true
+  - type: input
+    id: model
+    attributes:
+      label: Model and bridge
+      description: Which model you called and how (openai-php/client, a custom closure, ...).
+      placeholder: gpt-6.1-sol through openai-php/client, Responses API
+    validations:
+      required: false
+  - type: textarea
+    id: what-happened
+    attributes:
+      label: What happened
+      description: What you expected, and what you got instead.
+    validations:
+      required: true
+  - type: textarea
+    id: reproduce
+    attributes:
+      label: How to reproduce
+      description: The smallest code that shows the problem.
+      render: php
+    validations:
+      required: true
+  - type: textarea
+    id: text
+    attributes:
+      label: Text you scored
+      description: The text, or the smallest piece of it that still shows the problem. Remove anything private first.
+      render: markdown

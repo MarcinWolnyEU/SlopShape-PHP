@@ -1,0 +1,11 @@
+/build/
+/vendor/
+/.phpunit.cache/
+/.php-cs-fixer.cache
+/.infection/
+composer.lock
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+*.log
